@@ -1,0 +1,16 @@
+
+
+یعنی فایل تو Carriage Return (\r) داره (که مخصوص Windows هست) و Prettier انتظار Line Feed (\n) داره (که مخصوص UNIX/Linux/macOS هست).
+
+راه حل‌ها:
+1️⃣ تنظیم VS Code برای استفاده از LF:
+
+پایین راست VS Code روی CRLF کلیک کن.
+
+LF رو انتخاب کن.
+
+فایل رو ذخیره کن دوباره.
+
+2️⃣ تنظیم Prettier برای سازگاری با CRLF:
+
+در فایل package.json یا .prettierrc اضافه کن:

@@ -1,0 +1,167 @@
+// class MyClass {
+//   constructor() {
+//     console.log("Class Created SuccessFully!");
+//   }
+// }
+
+// const a = new MyClass();
+
+/**
+ *   حالا برای مثال میخواهیم تابع کمکی برای کلاس خودمان ایجاد کنیم
+ *   تابتوانبم مدیریت ارزشمند تری روی لاگ های کلاس داشته باشم
+ *   درواقع شی که ازروی کلاس ما ساخته شود را به این فانکشن پاس
+ *   مشخص کردیم constructor میدهد که ما ورودی
+ *
+ *   زمان اجرا شدن این دکوریتور ها زمانی است
+ *   که کلاس ها تشکیل میشوند
+ *   نه زمانی که نمونه ای داره از کلاس ها ساخته میشه
+ *
+ */
+
+const logData = (constructor: Function) => {
+  console.log("constructor result : ", constructor.name);
+};
+
+console.log("-------------Example 1--------------");
+
+@logData
+class MyClass {}
+
+console.log("-------------Example 2--------------");
+/**
+ *   میتوانیم دکوریتور خود را برای یک تابع نیز تعریف کنیم
+ *   یعنی حتی تابعی که دریک کلاس ان را ایجاد کرده باشیم
+ *
+ */
+
+/**
+ *  توابع زیر رو به صورت اتوماتیک برای دکوریتور ارسال میکند :
+ *
+ * @param target :  (MyDecoratorExampleClass) سازنده کلاس رو ارسال میکنه
+ * @param key    : (Message) اسم فانکشنی که دکوریتور بالای سر ان است
+ * @param descriptor : (descriptor) توضیحاتی درباره این فانکشن به ما میدهد درباره خصوصیات رفتاری ان
+ *
+ *  بایک مقدار جدید جایگزین کنیم Message خب حالا میخواهیم مقدار این تابع را
+ *
+ *
+ */
+
+const handelDecoratorExample1 = (
+  target: Object,
+  key: string | symbol,
+  descriptor: PropertyDescriptor
+) => {
+  console.log("Target Constructor.name ==> ", target.constructor.name);
+  console.log("Key  ==> ", key);
+  console.log("descriptor ==> ", descriptor);
+
+  const original = descriptor.value;
+  descriptor.value = function (...args: any[]) {
+    return original.apply(this, args);
+  };
+};
+
+class MyDecoratorExampleClass {
+  @handelDecoratorExample1
+  Message() {
+    console.log("Hello My Boy !");
+  }
+}
+
+/**
+ *  میتوانیم از دکوریتور روی پراپرتی های یک کلاس نیز استفاده کنیم
+ *
+ *
+ */
+
+const handelDecoratorProperty = (target: Object, key: string | symbol) => {
+  console.log("Target Constructor.name ==> ", target.constructor.name);
+  console.log("Key  ==> ", key);
+};
+
+class DecoratorPropertyClass {
+  @handelDecoratorProperty
+  firstName: string = "";
+}
+
+console.log("-------------Example 3--------------");
+
+/**
+ *  استفاده از دکریتور برای پارامتر های ورودی یک تابع
+ */
+
+const handelDecoratorInputFunction = (
+  target: Object,
+  methodName: string,
+  index: number
+) => {
+  console.log("Target Constructor.name ==> ", target.constructor.name);
+  console.log(`Parametr num ${index} in ,method ${methodName}`);
+};
+
+class DecratorClassInput {
+  sayHello(@handelDecoratorInputFunction firstName: string) {
+    console.log(`Hello ${firstName}`);
+  }
+}
+
+console.log("-------------Example 4--------------");
+
+/**
+ *
+ *  setter و getter  استفاده در متد های
+ *
+ */
+
+const handelGetterMethod = (
+  target: Object,
+  key: string | symbol,
+  descriptor: PropertyDescriptor
+) => {
+  const original = descriptor.get;
+
+  console.log("KEY : ", key);
+  descriptor.get = function () {
+    return original!.apply(this);
+  };
+};
+
+class ClassGetterMethod {
+  private firstName: string = "Hadi";
+  @handelGetterMethod
+  get getFirstName() {
+    return this.firstName;
+  }
+}
+
+console.log("-------------Example 5--------------");
+
+/**
+ *
+ *  خب حالا میخواهیم به دکوریتور یک ورودی بفرستیم
+ *  به حالتی که دکوریتور ما یک دکوریتور دیگری را برمیگرداند فکتوری دکوریتور میکویند
+ *
+ *
+ */
+
+const handelLogPersonDec = (value: string | number) => {
+  return (target: Function) => {
+    console.log("Result : ", value);
+    console.log("Target : ", target);
+  };
+};
+
+@handelLogPersonDec(4 * 4)
+class Person {
+  firstName?: string;
+  lastName?: string;
+
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  getFullName() {
+    return `my Name is ${this.firstName} and ${this.lastName}`;
+  }
+}
