@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { Injectable, Optional, Inject } from '@nestjs/common';
@@ -49,28 +50,36 @@ type Servive = {
   log: (message: string) => void;
 };
 
-@Injectable() // این خاصیت باعث میشود بتوانیم از سرویس در سر تاسر پروژه استفاده کنیم
+@Injectable()
 export class UsersService {
-  private readonly users: UsersType[] = [];
+  private readonly users: UsersType[] = [
+    { id: 1, firstName: 'hadi', lastName: 'yonsei', age: 24 },
+    { id: 2, firstName: 'sara', lastName: 'kamali', age: 29 },
+    { id: 3, firstName: 'rasol', lastName: 'hossini', age: 23 },
+    { id: 4, firstName: 'kaveh', lastName: 'ahmadi', age: 48 },
+  ];
+
   constructor(
-    private logger: Servive,
-    @Optional() @Inject('') private httpClient?: string,
+    @Inject('LOGGER1') private logger1: Servive,
+    @Inject('LOGGER2') private logger2: Servive,
+    @Optional() @Inject('HTTP_CLIENT') private httpClient?: string, // اگه خواستی بعداً برای HttpClient چیزی تزریق کنی
   ) {}
 
   create(user: UsersType) {
     this.users.push(user);
   }
-  getUsers(): UsersType[] {
+
+  getAllUsers(): UsersType[] {
     return this.users;
   }
-
+  getOneUsers(id: number): UsersType | undefined {
+    return this.users.find?.((it) => it.id === id);
+  }
   loggerMethods() {
-    this.logger.log('Hello Nest');
+    this.logger1.log('Hello from Logger1');
+    this.logger2.log('Hello from Logger2');
   }
 }
-
-const userService1 = new UsersService(new LoggerService1());
-const userService2 = new UsersService(new LoggerService2());
 
 // -------------------------------------------------------------------
 @Injectable()

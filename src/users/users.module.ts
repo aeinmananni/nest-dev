@@ -53,11 +53,16 @@
 import { Global, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { LoggerService1, LoggerService2 } from './log';
 
 @Global()
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    UsersService,
+    { provide: 'LOGGER1', useClass: LoggerService1 },
+    { provide: 'LOGGER2', useClass: LoggerService2 },
+  ],
   exports: [UsersService],
 })
 export class UsersModule {}
