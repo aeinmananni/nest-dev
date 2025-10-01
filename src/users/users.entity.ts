@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/app/users/users.entity.ts
 
 export class UsersType {

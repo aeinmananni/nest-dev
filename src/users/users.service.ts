@@ -79,6 +79,18 @@ export class UsersService {
     this.logger1.log('Hello from Logger1');
     this.logger2.log('Hello from Logger2');
   }
+
+  addUser(data: UsersType) {
+    this.users.push(data);
+    return true;
+  }
+
+  editUser(data: UsersType) {
+    const findIndex = this.users.findIndex((it) => it.id === data.id);
+    this.users[findIndex] = data;
+
+    return true;
+  }
 }
 
 // -------------------------------------------------------------------
