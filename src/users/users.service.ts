@@ -1,7 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
-import { Injectable, Optional, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  Optional,
+  Inject,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersType } from './users.types';
 import { LoggerService1, LoggerService2 } from './log';
 
@@ -73,7 +78,11 @@ export class UsersService {
     return this.users;
   }
   getOneUsers(id: number): UsersType | undefined {
-    return this.users.find?.((it) => it.id === id);
+    const result = this.users.find?.((it) => it.id === id);
+    if (!result) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return result;
   }
   loggerMethods() {
     this.logger1.log('Hello from Logger1');

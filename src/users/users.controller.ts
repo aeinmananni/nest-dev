@@ -40,7 +40,27 @@ export class UsersController {
     )
     id: number,
   ) {
-    return this.usersService.getOneUsers(id);
+    const result = this.usersService.getOneUsers(id);
+    // if (!result) {
+    //   throw new HttpException('Access denine !', HttpStatus.FORBIDDEN);
+    // }
+
+    // try {
+    //   const result = this.usersService.getOneUsers(id);
+    //   return result;
+    // } catch (error) {
+    //   // throw new HttpException(
+    //   //   { statusbar: HttpStatus.FORBIDDEN, error: 'in file no Person' },
+    //   //   HttpStatus.FORBIDDEN,
+    //   //   { cause: error },
+    //   // );
+    //   throw new BadRequestException('Something bad happend', {
+    //     cause: error,
+    //     description: 'not find user in file',
+    //   });
+    // }
+
+    return result;
   }
   @Get('query')
   getOneUserWithQuery(
