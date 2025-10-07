@@ -5,6 +5,8 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -22,18 +24,36 @@ import { Request, Response } from 'express';
  * const status = exception.getStatus(); استاتوس ورودی درخواست را نیز میتوانیم بگیریم
  */
 
-@Catch(HttpException) //http اینجا میگوییم فقط برای اررو های مربوط به
-export class HttpExceptionFilter implements ExceptionFilter {
+@Catch() //http اینجا میگوییم فقط برای اررو های مربوط به
+export class AllExceptionsFilter implements ExceptionFilter {
+  private readonly logger = new Logger(AllExceptionsFilter.name);
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    response.status(status).json({
+    const message =
+      exception instanceof HttpException
+        ? exception.getResponse()
+        : 'Internal Server Error';
+
+    const errorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-    });
+      method: request.method,
+      message,
+    };
+    this.logger.error(
+      `[${request.method}] ${request.url}`,
+      JSON.stringify(errorResponse),
+      exception instanceof Error ? exception.stack : '',
+    );
+
+    response.status(status).json(errorResponse);
   }
 }

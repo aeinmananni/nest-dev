@@ -11,11 +11,13 @@ import {
   Put,
   ParseIntPipe,
   HttpStatus,
+  // UseFilters,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import type { Request, Response } from 'express';
 import { CreateUsersDto } from './dto/index.dto';
 import { ValidationUserPipe } from './pipe/user-validation.pipe';
+// import { HttpExceptionFilter } from 'src/error/exception_filter.error';
 /**
  * به این صورت عمل کنیم userService میتوانیم برای دسترسی به متد های
  * ( constructor(private readonly usersService: UsersService) {} )
@@ -33,6 +35,7 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
   @Get('single/:id')
+  // @UseFilters(new HttpExceptionFilter())
   getOneUser(
     @Param(
       'id',

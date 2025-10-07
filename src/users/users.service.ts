@@ -6,6 +6,8 @@ import {
   Optional,
   Inject,
   NotFoundException,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { UsersType } from './users.types';
 import { LoggerService1, LoggerService2 } from './log';
@@ -80,7 +82,7 @@ export class UsersService {
   getOneUsers(id: number): UsersType | undefined {
     const result = this.users.find?.((it) => it.id === id);
     if (!result) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new HttpException(`Invalid userId ${id}`, HttpStatus.FORBIDDEN);
     }
     return result;
   }
