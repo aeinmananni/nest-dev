@@ -17,6 +17,7 @@ import { UsersService } from './users.service';
 import type { Request, Response } from 'express';
 import { CreateUsersDto } from './dto/index.dto';
 import { ValidationUserPipe } from './pipe/user-validation.pipe';
+import { AuthService } from 'src/auth/auth.service';
 // import { HttpExceptionFilter } from 'src/error/exception_filter.error';
 /**
  * به این صورت عمل کنیم userService میتوانیم برای دسترسی به متد های
@@ -28,7 +29,10 @@ import { ValidationUserPipe } from './pipe/user-validation.pipe';
  */
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
   @Get()
   // @Redirect('https://google.com')
   getUsers() {
@@ -36,14 +40,17 @@ export class UsersController {
   }
   @Get('single/:id')
   // @UseFilters(new HttpExceptionFilter())
-  getOneUser(
+  async getOneUser(
     @Param(
       'id',
       new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
     )
     id: number,
   ) {
-    const result = this.usersService.getOneUsers(id);
+    const result = await this.authService
+      .singIn(id)
+      .then((res) => res.access_token);
+
     // if (!result) {
     //   throw new HttpException('Access denine !', HttpStatus.FORBIDDEN);
     // }

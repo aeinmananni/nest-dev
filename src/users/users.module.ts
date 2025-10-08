@@ -50,10 +50,11 @@
 // })
 // export class UsersModule {}
 
-import { Global, Module } from '@nestjs/common';
+import { forwardRef, Global, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { LoggerService1, LoggerService2 } from './log';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Global()
 @Module({
@@ -63,6 +64,7 @@ import { LoggerService1, LoggerService2 } from './log';
     { provide: 'LOGGER1', useClass: LoggerService1 },
     { provide: 'LOGGER2', useClass: LoggerService2 },
   ],
+  imports: [forwardRef(() => AuthModule)],
   exports: [UsersService],
 })
 export class UsersModule {}

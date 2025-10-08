@@ -1,14 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
-import {
-  Injectable,
-  Optional,
-  Inject,
-  NotFoundException,
-  HttpStatus,
-  HttpException,
-} from '@nestjs/common';
+import { Injectable, Optional, Inject } from '@nestjs/common';
 import { UsersType } from './users.types';
 import { LoggerService1, LoggerService2 } from './log';
 
@@ -80,11 +73,7 @@ export class UsersService {
     return this.users;
   }
   getOneUsers(id: number): UsersType | undefined {
-    const result = this.users.find?.((it) => it.id === id);
-    if (!result) {
-      throw new HttpException(`Invalid userId ${id}`, HttpStatus.FORBIDDEN);
-    }
-    return result;
+    return this.users.find?.((it) => it.id === id);
   }
   loggerMethods() {
     this.logger1.log('Hello from Logger1');
