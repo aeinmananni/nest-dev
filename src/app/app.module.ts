@@ -9,6 +9,8 @@ import { CommonModule } from '../common/common.module';
 import { CoreModule } from '../core/core.module';
 import { LoggerMiddelWare1 } from 'src/middelWares/logger1.middel';
 import { LoggerMiddelWare2 } from 'src/middelWares/logger2.middel';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 /**
  * از این میدلویر استفاده نکند admins میتوانیم بگوییم مسیری مثلا با نام
@@ -41,7 +43,7 @@ import { LoggerMiddelWare2 } from 'src/middelWares/logger2.middel';
     CoreModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: AuthGuard }],
 })
 
 // برای ادد کردن میدلویر

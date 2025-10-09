@@ -11,6 +11,7 @@ import {
   Put,
   ParseIntPipe,
   HttpStatus,
+
   // UseFilters,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -18,6 +19,8 @@ import type { Request, Response } from 'express';
 import { CreateUsersDto } from './dto/index.dto';
 import { ValidationUserPipe } from './pipe/user-validation.pipe';
 import { AuthService } from 'src/auth/auth.service';
+import { Public } from 'src/auth/decorators/public.decorator';
+
 // import { HttpExceptionFilter } from 'src/error/exception_filter.error';
 /**
  * به این صورت عمل کنیم userService میتوانیم برای دسترسی به متد های
@@ -39,6 +42,7 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
   @Get('single/:id')
+  @Public()
   // @UseFilters(new HttpExceptionFilter())
   async getOneUser(
     @Param(
@@ -83,12 +87,15 @@ export class UsersController {
   }
 
   @Post('/POST/Add')
+  // @UseGuards(AuthGuard)
   addUsersInfo(
     @Body(new ValidationUserPipe()) body: CreateUsersDto,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = this.usersService.addUser(body);
     res.setHeader('Cache-Control', 'no-store');
+    console.log('Request user Validation : ', req.user);
     res.status(200).send(result);
   }
 
