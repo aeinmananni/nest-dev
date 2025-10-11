@@ -20,6 +20,8 @@ import { CreateUsersDto } from './dto/index.dto';
 import { ValidationUserPipe } from './pipe/user-validation.pipe';
 import { AuthService } from 'src/auth/auth.service';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { Roles } from 'src/auth/decorators/rols.decorator';
+import { Rols } from 'src/common/enum/role.enum';
 
 // import { HttpExceptionFilter } from 'src/error/exception_filter.error';
 /**
@@ -37,7 +39,9 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
   @Get()
+
   // @Redirect('https://google.com')
+  @Roles(Rols.Admin)
   getUsers() {
     return this.usersService.getAllUsers();
   }

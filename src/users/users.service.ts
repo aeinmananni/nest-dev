@@ -53,10 +53,16 @@ type Servive = {
 @Injectable()
 export class UsersService {
   private readonly users: UsersType[] = [
-    { id: 1, firstName: 'hadi', lastName: 'yonsei', age: 24 },
-    { id: 2, firstName: 'sara', lastName: 'kamali', age: 29 },
-    { id: 3, firstName: 'rasol', lastName: 'hossini', age: 23 },
-    { id: 4, firstName: 'kaveh', lastName: 'ahmadi', age: 48 },
+    { id: 1, firstName: 'hadi', lastName: 'yonsei', age: 24, roles: ['ADMIN'] },
+    { id: 2, firstName: 'sara', lastName: 'kamali', age: 29, roles: ['USER'] },
+    {
+      id: 3,
+      firstName: 'rasol',
+      lastName: 'hossini',
+      age: 23,
+      roles: ['USER'],
+    },
+    { id: 4, firstName: 'kaveh', lastName: 'ahmadi', age: 48, roles: ['USER'] },
   ];
 
   constructor(

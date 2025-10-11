@@ -17,7 +17,11 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const pyload = { userId: result.id, firstName: result.firstName };
+    const pyload = {
+      userId: result.id,
+      firstName: result.firstName,
+      roles: result.roles,
+    };
     return {
       access_token: await this.jwtService.signAsync(pyload),
     };

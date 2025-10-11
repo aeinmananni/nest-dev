@@ -8,11 +8,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstance } from './constance';
+import { jwtConstance } from '../auth/constance';
 import { Request } from 'express';
-import { JwtPayloadType } from './types/jwt-payload.type';
+import { JwtPayloadType } from '../auth/types/jwt-payload.type';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from './decorators/public.decorator';
+import { IS_PUBLIC_KEY } from '../auth/decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
